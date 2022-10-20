@@ -1,33 +1,26 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { counterActions } from "../store/index";
-
 import axios from "axios";
 import "./styles/posts.scss";
 import Post from "./Post";
+
 function Posts() {
   const [posts, setPost] = useState([]);
   const [users, setUsers] = useState([]);
-  const p = useSelector((state) => state.posts);
-  const u = useSelector((state) => state.users);
-
   let postsUrl = "https://jsonplaceholder.typicode.com/posts";
   let usersUrl = "https://jsonplaceholder.typicode.com/users";
 
-  //get post data from api
+  //get post and users data from api
   useEffect(() => {
     axios.get(postsUrl).then((response) => {
       setPost(response.data);
     });
-  }, []);
-
-  //get users data from api
-  useEffect(() => {
     axios.get(usersUrl).then((response) => {
       setUsers(response.data);
     });
-  }, []);
+  }, [usersUrl, postsUrl]);
 
   //adding posts and users data in redux
   const dispatch = useDispatch();
@@ -36,7 +29,7 @@ function Posts() {
       dispatch(counterActions.SetPostsInRedux(posts));
       dispatch(counterActions.SetUsersRedux(users));
     }
-  }, [posts, users]);
+  }, [posts, users, dispatch]);
 
   return (
     <div className="posts">

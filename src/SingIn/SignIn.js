@@ -7,48 +7,52 @@ import { useNavigate } from "react-router";
 import "./styles/signIn.scss";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 function SignIn() {
-
   const [inputedData, setInputedData] = useState({
     username: "",
     password: "",
   });
-  let navigate = useNavigate();
-  let url = window.location.pathname;
+  const [nameError, setNameError] = useState("");
+  const [passwordError, setpasswordError] = useState("");
 
+  let navigate = useNavigate();
   const noPointer = { cursor: "pointer" };
 
   function GoToSignUp() {
-    let newurl = url.replace("/", "/SignUp");
-    navigate(`${newurl}`, { replace: true });
+    navigate("/SignUp");
   }
 
   function GoToResetPassword() {
-    let newurl = url.replace("/", "/ResetPassword");
-    navigate(`${newurl}`, { replace: true });
+    navigate("/ResetPassword");
   }
 
-  function GoToPosts() {
-    let newurl = url.replace("/", "/Posts");
-    navigate(`${newurl}`, { replace: true });
+  function GoToPosts(event) {
+    event.preventDefault();
+    if (inputedData.username.length === 0) {
+      setNameError("Please Fill Up The Username Form Correctly");
+    }
+    if (inputedData.password.length === 0 || inputedData.password.length < 8) {
+      setpasswordError("Please Fill Up The Password Form Correctly");
+    } else {
+      navigate("/Posts");
+    }
   }
-
-
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
     },
   });
-  
   return (
     <div className="inputForm">
       <ThemeProvider theme={darkTheme}>
         <form>
-          <p>Sign In</p>
+          <p className="pSignIn">Sign In</p>
           <TextField
             required
             id="username"
             label="Username"
             variant="outlined"
+            error={nameError !== ""}
+            helperText={nameError !== "" ? nameError : " "}
             onChange={(e) =>
               setInputedData({ ...inputedData, username: e.target.value })
             }
@@ -61,6 +65,8 @@ function SignIn() {
             type="password"
             variant="outlined"
             autoComplete="current-password"
+            error={passwordError !== ""}
+            helperText={passwordError !== "" ? passwordError : " "}
             onChange={(e) =>
               setInputedData({ ...inputedData, password: e.target.value })
             }
@@ -70,7 +76,7 @@ function SignIn() {
             variant="contained"
             sx={{ mt: 2 }}
             endIcon={<LoginIcon />}
-            onClick={GoToPosts}
+            onClick={(event) => GoToPosts(event)}
           >
             Sign In
           </Button>

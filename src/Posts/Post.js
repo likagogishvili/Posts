@@ -5,29 +5,48 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import Link from "@mui/material/Link";
-import "./styles/posts.scss";
-import { useSelector } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-
 import CircularProgress from "@mui/material/CircularProgress";
-import { useState } from "react";
-
+import "./styles/posts.scss";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { counterActions } from "../store/index";
+import { useNavigate } from "react-router";
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
 function Post() {
-  const darkTheme = createTheme({
-    palette: {
-      mode: "dark",
-    },
-  });
-
   const posts = useSelector((state) => state.posts);
   const users = useSelector((state) => state.users);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(8);
+  const authorFromRedux = useSelector((state) => state.author);
+  const postFromRedux = useSelector((state) => state.selectedPost);
+  let navigate = useNavigate();
+  const [author, setAuthor] = useState("");
+  const [selectedPost, setSelectedPost] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  // eslint-disable-next-line
+  const [postsPerPage, setPostsPerPage] = useState(8);
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = posts.slice(firstPostIndex, lastPostIndex);
+
+  function GetAuthor(id) {
+    return users.filter((user) => user.id === id)[0].name;
+  }
+  function GetToAuthorPage(e) {
+    setAuthor(e.target.id);
+    setTimeout(() => {
+      navigate("/Author");
+    }, 2);
+  }
+
+  function GoToClickedPost(e) {
+    setSelectedPost(e.target.id);
+    setTimeout(() => {
+      navigate("/Post");
+    }, 2);
+  }
 
   const RenderPosts = currentPosts.map((item) => {
     return (
@@ -46,19 +65,41 @@ function Post() {
             <Typography variant="body2" color="text.secondary">
               {item.body}
             </Typography>
-
             <Link
               sx={{ mt: 3, float: "right", mb: 3 }}
-              // onClick={GoToResetPassword}
+              id={item.userId}
+              onClick={GetToAuthorPage}
             >
-              by author
+              {GetAuthor(item.userId)}
             </Link>
           </CardContent>
         </CardActionArea>
+        <Button
+          variant="outlined"
+          sx={{ float: "right", mb: 1 }}
+          id={item.id}
+          onClick={(e) => GoToClickedPost(e)}
+        >
+          Go To Product Page
+        </Button>
       </Card>
     );
   });
-  console.log(currentPage);
+
+  //adding posts and users data in redux
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(counterActions.SetAuthorRedux(author));
+    dispatch(counterActions.SetselectedPostRedux(selectedPost));
+  }, [author, selectedPost, dispatch]);
+
+  console.log(selectedPost);
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: "dark",
+    },
+  });
   return (
     <ThemeProvider theme={darkTheme}>
       <div className="post">
@@ -69,11 +110,15 @@ function Post() {
         )}
       </div>
       <Stack sx={{ maxWidth: 345, m: "auto", pt: 4, pb: 4 }}>
-        <Pagination
-          count={Math.ceil(posts.length / postsPerPage)}
-          onClick={(e) => setCurrentPage(e.target.textContent)}
-          color="primary"
-        />
+        {posts.length ? (
+          <Pagination
+            count={Math.ceil(posts.length / postsPerPage)}
+            onClick={(e) => setCurrentPage(e.target.textContent)}
+            color="primary"
+          />
+        ) : (
+          ""
+        )}
       </Stack>
     </ThemeProvider>
   );

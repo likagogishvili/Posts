@@ -2,6 +2,8 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 const initialState = {
   posts: [],
   users: [],
+  author: "",
+  selectedPost: "",
 };
 
 const counterSlice = createSlice({
@@ -13,6 +15,12 @@ const counterSlice = createSlice({
     },
     SetUsersRedux(state, action) {
       state.users = action.payload;
+    },
+    SetAuthorRedux(state, action) {
+      state.author = action.payload;
+    },
+    SetselectedPostRedux(state, action) {
+      state.selectedPost = action.payload;
     },
   },
 });
