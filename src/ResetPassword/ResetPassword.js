@@ -4,41 +4,24 @@ import { useState } from "react";
 import Link from "@mui/material/Link";
 import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router";
-import "./styles/signIn.scss";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-function SignIn() {
-
+function ResetPassword() {
   const [inputedData, setInputedData] = useState({
-    username: "",
-    password: "",
+    email: "",
+    newPassword: "",
   });
   let navigate = useNavigate();
-  let url = window.location.pathname;
-
   const noPointer = { cursor: "pointer" };
-
-  function GoToSignUp() {
-    let newurl = url.replace("/", "/SignUp");
+  function GoToSignIn() {
+    let url = window.location.pathname;
+    let newurl = url.replace("/ResetPassword", "/");
     navigate(`${newurl}`, { replace: true });
   }
-
-  function GoToResetPassword() {
-    let newurl = url.replace("/", "/ResetPassword");
-    navigate(`${newurl}`, { replace: true });
-  }
-
-  function GoToPosts() {
-    let newurl = url.replace("/", "/Posts");
-    navigate(`${newurl}`, { replace: true });
-  }
-
-
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
     },
   });
-  
   return (
     <div className="inputForm">
       <ThemeProvider theme={darkTheme}>
@@ -46,45 +29,35 @@ function SignIn() {
           <p>Sign In</p>
           <TextField
             required
-            id="username"
-            label="Username"
+            id="email"
+            label="Email"
             variant="outlined"
             onChange={(e) =>
-              setInputedData({ ...inputedData, username: e.target.value })
+              setInputedData({ ...inputedData, email: e.target.value })
             }
           />
           <TextField
             required
             sx={{ mt: 1 }}
             id="password"
-            label="Password"
+            label="New Password"
             type="password"
             variant="outlined"
             autoComplete="current-password"
             onChange={(e) =>
-              setInputedData({ ...inputedData, password: e.target.value })
+              setInputedData({ ...inputedData, newPassword: e.target.value })
             }
           />
 
-          <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            endIcon={<LoginIcon />}
-            onClick={GoToPosts}
-          >
-            Sign In
+          <Button variant="contained" sx={{ mt: 2 }} endIcon={<LoginIcon />}>
+            Change Password
           </Button>
-
-          <Link sx={{ mt: 2 }} onClick={GoToSignUp} style={noPointer}>
-            Do Not have an account?
-          </Link>
-
-          <Link sx={{ mt: 2 }} style={noPointer} onClick={GoToResetPassword}>
-            Reset Password
+          <Link sx={{ mt: 2, mb: 2 }} onClick={GoToSignIn} style={noPointer}>
+            Already have an account?
           </Link>
         </form>
       </ThemeProvider>
     </div>
   );
 }
-export default SignIn;
+export default ResetPassword;

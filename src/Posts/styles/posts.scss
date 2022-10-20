@@ -1,0 +1,19 @@
+@mixin flexCenter {
+    display: flex;
+  }
+.posts{
+    min-height: 100vh;
+    background-color: #1A2027;
+    .postContainer{
+        width: 90%;
+        margin: auto;
+        padding-top: 0.3%;
+    }
+
+}    
+.post{
+    display: flex;
+    justify-content: space-evenly;
+    gap:10px;
+    flex-wrap: wrap;
+}
