@@ -40,11 +40,13 @@ function Post() {
 
   function GoToClickedPost(e) {
     setSelectedPost(e.target.id);
-    setTimeout(() => {
-      navigate("/Post");
-    }, 2);
   }
-
+  useEffect(() => {
+    if (selectedPost.length !== 0) {
+      navigate(`/Post/${selectedPost}`);
+    }
+    // eslint-disable-next-line
+  }, [selectedPost]);
   const RenderPosts = currentPosts.map((item) => {
     return (
       <Card

@@ -6,14 +6,10 @@ import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router";
 import "./styles/signIn.scss";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { useForm } from "react-hook-form";
 function SignIn() {
-  const [inputedData, setInputedData] = useState({
-    username: "",
-    password: "",
-  });
-  const [nameError, setNameError] = useState("");
-  const [passwordError, setpasswordError] = useState("");
-
+  // eslint-disable-next-line
+  const [inputedData, setInputedData] = useState();
   let navigate = useNavigate();
   const noPointer = { cursor: "pointer" };
 
@@ -24,38 +20,34 @@ function SignIn() {
   function GoToResetPassword() {
     navigate("/ResetPassword");
   }
-
-  function GoToPosts(event) {
-    event.preventDefault();
-    if (inputedData.username.length === 0) {
-      setNameError("Please Fill Up The Username Form Correctly");
-    }
-    if (inputedData.password.length === 0 || inputedData.password.length < 8) {
-      setpasswordError("Please Fill Up The Password Form Correctly");
-    } else {
-      navigate("/Posts");
-    }
-  }
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
     },
   });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    setInputedData(data);
+    navigate("/Posts");
+  };
   return (
     <div className="inputForm">
       <ThemeProvider theme={darkTheme}>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <p className="pSignIn">Sign In</p>
           <TextField
             required
             id="username"
             label="Username"
             variant="outlined"
-            error={nameError !== ""}
-            helperText={nameError !== "" ? nameError : " "}
-            onChange={(e) =>
-              setInputedData({ ...inputedData, username: e.target.value })
-            }
+            {...register("name", { required: "Required" })}
+            error={!!errors?.name}
+            helperText={errors?.name ? errors.name.message : null}
           />
           <TextField
             required
@@ -65,18 +57,23 @@ function SignIn() {
             type="password"
             variant="outlined"
             autoComplete="current-password"
-            error={passwordError !== ""}
-            helperText={passwordError !== "" ? passwordError : " "}
-            onChange={(e) =>
-              setInputedData({ ...inputedData, password: e.target.value })
-            }
+            {...register("password", {
+              required: "Required field",
+              pattern: {
+                value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                message:
+                  "Invalid password It must be min 8 letter password, with at least a symbol, upper and lower case letters and a number",
+              },
+            })}
+            error={!!errors?.password}
+            helperText={errors?.password ? errors.password.message : null}
           />
 
           <Button
             variant="contained"
             sx={{ mt: 2 }}
             endIcon={<LoginIcon />}
-            onClick={(event) => GoToPosts(event)}
+            type="submit"
           >
             Sign In
           </Button>

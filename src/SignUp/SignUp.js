@@ -7,20 +7,14 @@ import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import { useNavigate } from "react-router";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import { useForm } from "react-hook-form";
 
 function SignUp() {
-  const [registrationData, setRegistrationData] = useState({
-    name: "",
-    lname: "",
-    email: "",
-    password: "",
-  });
-
+  // eslint-disable-next-line
+  const [registrationData, setRegistrationData] = useState();
   let navigate = useNavigate();
   function GoToSignIn() {
-    let url = window.location.pathname;
-    let newurl = url.replace("/SignUp", "/");
-    navigate(`${newurl}`, { replace: true });
+    navigate("/SignIn");
   }
   const noPointer = { cursor: "pointer" };
 
@@ -30,12 +24,21 @@ function SignUp() {
     },
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    setRegistrationData(data);
+    alert("Account Created");
+    navigate("/");
+  };
   return (
     <div className="inputForm">
       <ThemeProvider theme={darkTheme}>
-        <form>
-          <p>Sign Up</p>
-
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <p className="pSignIn">Sign Up</p>
           <Box
             sx={{
               display: "flex",
@@ -50,12 +53,9 @@ function SignUp() {
               id="name"
               label="First Name"
               variant="outlined"
-              onChange={(e) =>
-                setRegistrationData({
-                  ...registrationData,
-                  name: e.target.value,
-                })
-              }
+              {...register("name", { required: "Required" })}
+              error={!!errors?.name}
+              helperText={errors?.name ? errors.name.message : null}
             />
             <TextField
               required
@@ -63,12 +63,9 @@ function SignUp() {
               sx={{ mt: 1 }}
               label="Last Name"
               variant="outlined"
-              onChange={(e) =>
-                setRegistrationData({
-                  ...registrationData,
-                  lname: e.target.value,
-                })
-              }
+              {...register("lname", { required: "Required" })}
+              error={!!errors?.lname}
+              helperText={errors?.lname ? errors.lname.message : null}
             />
           </Box>
           <TextField
@@ -77,12 +74,15 @@ function SignUp() {
             id="email"
             label="Email"
             variant="outlined"
-            onChange={(e) =>
-              setRegistrationData({
-                ...registrationData,
-                email: e.target.value,
-              })
-            }
+            {...register("email", {
+              required: "Required field",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            })}
+            error={!!errors?.email}
+            helperText={errors?.email ? errors.email.message : null}
           />
           <TextField
             required
@@ -92,14 +92,24 @@ function SignUp() {
             type="password"
             variant="outlined"
             autoComplete="current-password"
-            onChange={(e) =>
-              setRegistrationData({
-                ...registrationData,
-                password: e.target.value,
-              })
-            }
+            {...register("password", {
+              required: "Required field",
+              pattern: {
+                value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                message:
+                  "Invalid password It must be min 8 letter password, with at least a symbol, upper and lower case letters and a number",
+              },
+            })}
+            error={!!errors?.password}
+            helperText={errors?.password ? errors.password.message : null}
           />
-          <Button variant="contained" sx={{ mt: 2 }} endIcon={<VpnKeyIcon />}>
+          <Button
+            variant="contained"
+            sx={{ mt: 2 }}
+            endIcon={<VpnKeyIcon />}
+            // onClick={SignUp}
+            type="submit"
+          >
             Create an Account
           </Button>
 

@@ -27,7 +27,7 @@ function Author() {
     return user.userId === parseInt(author);
   });
   let renderAuthorCard = renderAuthorPosts.map((item) => {
-    return <AuthorPost title={item.title} body={item.body} key={item.id} />;
+    return <AuthorPost name={item.name} body={item.body} key={item.id} />;
   });
   return (
     <div className="posts">

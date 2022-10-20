@@ -5,9 +5,41 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #1A2027;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+::selection {
+  background: #8FC9F9;
+}
+body::-webkit-scrollbar {
+  width: 10px; /* width of the entire scrollbar */
+}
+body::-webkit-scrollbar-track {
+  background: transparent; /* color of the tracking area */
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #8FC9F9; /* color of the scroll thumb */
+}
+html,
+input,
+label,
+select,
+option {
+  cursor: url("assets/cursors/cursor.cur"), auto !important;
+}
+button,
+path,
+svg,
+rect,
+.inputSymbol,
+.swiper-button-next,
+.swiper-button-prev,
+.Info,
+tspan {
+  cursor: url("assets/cursors/cursorPointer.cur"), auto !important;
 }

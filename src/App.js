@@ -15,7 +15,9 @@ function App() {
         <Route path="/ResetPassword" element={<ResetPassword />} />
         <Route path="/Posts" element={<Posts />} />
         <Route path="/Author" element={<Author />} />
-        <Route path="/Post" element={< ChosenPost/>} />
+        {/* <Route path="/Post" element={< ChosenPost/>} /> */}
+        <Route path="/Post/:postId" exact element={ <ChosenPost/>} />
+
       </Routes>
     </Router>
   );
