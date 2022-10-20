@@ -14,12 +14,9 @@ import { useState, useEffect } from "react";
 import { counterActions } from "../store/index";
 import { useNavigate } from "react-router";
 import Button from "@mui/material/Button";
-import SendIcon from "@mui/icons-material/Send";
 function Post() {
   const posts = useSelector((state) => state.posts);
   const users = useSelector((state) => state.users);
-  const authorFromRedux = useSelector((state) => state.author);
-  const postFromRedux = useSelector((state) => state.selectedPost);
   let navigate = useNavigate();
   const [author, setAuthor] = useState("");
   const [selectedPost, setSelectedPost] = useState("");
@@ -50,7 +47,16 @@ function Post() {
 
   const RenderPosts = currentPosts.map((item) => {
     return (
-      <Card key={item.id} sx={{ maxWidth: 345, mt: 2 }}>
+      <Card
+        key={item.id}
+        sx={{
+          maxWidth: 345,
+          mt: 2,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         <CardActionArea>
           <CardMedia
             component="img"
@@ -76,11 +82,11 @@ function Post() {
         </CardActionArea>
         <Button
           variant="outlined"
-          sx={{ float: "right", mb: 1 }}
+          sx={{ float: "right" }}
           id={item.id}
           onClick={(e) => GoToClickedPost(e)}
         >
-          Go To Product Page
+          Go To Post Page
         </Button>
       </Card>
     );
@@ -92,8 +98,6 @@ function Post() {
     dispatch(counterActions.SetAuthorRedux(author));
     dispatch(counterActions.SetselectedPostRedux(selectedPost));
   }, [author, selectedPost, dispatch]);
-
-  console.log(selectedPost);
 
   const darkTheme = createTheme({
     palette: {

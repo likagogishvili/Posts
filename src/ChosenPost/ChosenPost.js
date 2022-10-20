@@ -1,18 +1,21 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-
+import { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
+import { Divider, Avatar, Grid, Paper } from "@material-ui/core";
 
 function ChosenPost() {
   const post = useSelector((state) => state.selectedPost);
   const users = useSelector((state) => state.users);
   const posts = useSelector((state) => state.posts);
-
+  const [comments, setComments] = useState();
+  let commentsURL = "https://jsonplaceholder.typicode.com/comments";
   let filteredPost = posts.filter((item) => {
     return item.id === parseInt(post);
   });
@@ -25,6 +28,16 @@ function ChosenPost() {
       mode: "dark",
     },
   });
+
+  useEffect(() => {
+    axios.get(commentsURL).then((response) => {
+      setComments(response.data);
+    });
+  }, [commentsURL]);
+
+  const imgLink =
+    "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
+  console.log(comments, "comments");
   return (
     <div className="posts">
       <div className="postContainer">
@@ -85,6 +98,53 @@ function ChosenPost() {
           <Box className="post" sx={{ mt: 3 }}>
             {/* {renderAuthorCard} */}
           </Box>
+          {/* <Paper style={{ padding: "40px 20px" }}>
+            <Grid container wrap="nowrap" spacing={2}>
+              <Grid item>
+                <Avatar alt="Remy Sharp" src={imgLink} />
+              </Grid>
+              <Grid justifyContent="left" item xs zeroMinWidth>
+                <h4 style={{ margin: 0, textAlign: "left" }}>Michel Michel</h4>
+                <p style={{ textAlign: "left" }}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Aenean luctus ut est sed faucibus. Duis bibendum ac ex
+                  vehicula laoreet. Suspendisse congue vulputate lobortis.
+                  Pellentesque at interdum tortor. Quisque arcu quam, malesuada
+                  vel mauris et, posuere sagittis ipsum. Aliquam ultricies a
+                  ligula nec faucibus. In elit metus, efficitur lobortis nisi
+                  quis, molestie porttitor metus. Pellentesque et neque risus.
+                  Aliquam vulputate, mauris vitae tincidunt interdum, mauris mi
+                  vehicula urna, nec feugiat quam lectus vitae ex.{" "}
+                </p>
+                <p style={{ textAlign: "left", color: "gray" }}>
+                  posted 1 minute ago
+                </p>
+              </Grid>
+            </Grid>
+            <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
+            <Grid container wrap="nowrap" spacing={2}>
+              <Grid item>
+                <Avatar alt="Remy Sharp" src={imgLink} />
+              </Grid>
+              <Grid justifyContent="left" item xs zeroMinWidth>
+                <h4 style={{ margin: 0, textAlign: "left" }}>Michel Michel</h4>
+                <p style={{ textAlign: "left" }}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Aenean luctus ut est sed faucibus. Duis bibendum ac ex
+                  vehicula laoreet. Suspendisse congue vulputate lobortis.
+                  Pellentesque at interdum tortor. Quisque arcu quam, malesuada
+                  vel mauris et, posuere sagittis ipsum. Aliquam ultricies a
+                  ligula nec faucibus. In elit metus, efficitur lobortis nisi
+                  quis, molestie porttitor metus. Pellentesque et neque risus.
+                  Aliquam vulputate, mauris vitae tincidunt interdum, mauris mi
+                  vehicula urna, nec feugiat quam lectus vitae ex.{" "}
+                </p>
+                <p style={{ textAlign: "left", color: "gray" }}>
+                  posted 1 minute ago
+                </p>
+              </Grid>
+            </Grid>
+          </Paper> */}
         </ThemeProvider>
       </div>
     </div>

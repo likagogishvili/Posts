@@ -29,7 +29,6 @@ function Author() {
   let renderAuthorCard = renderAuthorPosts.map((item) => {
     return <AuthorPost title={item.title} body={item.body} key={item.id} />;
   });
-  console.log("renderAuthorCard", renderAuthorCard);
   return (
     <div className="posts">
       <div className="postContainer">
