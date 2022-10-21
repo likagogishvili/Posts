@@ -42,6 +42,7 @@ function SignIn() {
           <p className="pSignIn">Sign In</p>
           <TextField
             required
+            sx={{ mt: 1,width:'80%' }}
             id="username"
             label="Username"
             variant="outlined"
@@ -51,7 +52,7 @@ function SignIn() {
           />
           <TextField
             required
-            sx={{ mt: 1 }}
+            sx={{ mt: 1,width:'80%' }}
             id="password"
             label="Password"
             type="password"
