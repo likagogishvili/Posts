@@ -19,7 +19,6 @@ function ChosenPost() {
   const posts = useSelector((state) => state.posts);
   const [selectedPost, setSelectedPost] = useState(post);
   const [value, setValue] = useState(false);
-
   const [comments, setComments] = useState();
   const [showMore, SetShowMore] = useState();
 
@@ -79,7 +78,8 @@ function ChosenPost() {
         setValue(false);
       }, 500);
     }
-  }, [value,filteredPost]);
+    // eslint-disable-next-line
+  }, [filteredPost]);
 
   return (
     <div className="posts">
