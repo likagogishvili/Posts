@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { counterActions } from "../store/index";
 import { useNavigate } from "react-router";
 import Button from "@mui/material/Button";
+import Header from "../Header/Header";
 function Post() {
   const posts = useSelector((state) => state.posts);
   const users = useSelector((state) => state.users);
@@ -107,7 +108,9 @@ function Post() {
     },
   });
   return (
+    
     <ThemeProvider theme={darkTheme}>
+      <Header/>
       <div className="post">
         {posts.length ? (
           RenderPosts
