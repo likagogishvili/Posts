@@ -1,10 +1,10 @@
 // import CustomInput from "./components/CustomInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 // import axios from 'axios'
 import * as muiSignUp from "./styles/muiSignUp";
+import axios from "axios";
 function SignUp() {
-  // eslint-disable-next-line
   const [registrationData, setRegistrationData] = useState();
   let navigate = useNavigate();
   function GoToSignIn() {
@@ -18,9 +18,21 @@ function SignUp() {
   } = muiSignUp.useForm();
   const onSubmit = (data) => {
     setRegistrationData(data);
-    alert("Account Created");
-    navigate("/");
+    // alert("Account Created");
+    // navigate("/");
   };
+
+  useEffect(() => {
+    if (registrationData) {
+      axios
+        .post("http://localhost:3001/register", { registrationData })
+        .then((res) => {
+          console.log(res);
+        });
+      console.log("registrationData", registrationData);
+    }
+  }, [registrationData]);
+
   return (
     <div className="inputForm">
       <form onSubmit={handleSubmit(onSubmit)}>
