@@ -1,12 +1,13 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "@mui/material/Link";
 import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router";
 import "./styles/signIn.scss";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 function SignIn() {
   // eslint-disable-next-line
   const [inputedData, setInputedData] = useState();
@@ -25,16 +26,32 @@ function SignIn() {
       mode: "dark",
     },
   });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    setInputedData(data);
-    navigate("/Posts");
+    if (data) {
+      axios.post("http://localhost:3001/login", { data }).then((res) => {
+        if (res.data.length) {
+          setInputedData(res.data);
+          navigate("/Posts");
+        }else{
+          console.log(res)
+        }
+      });
+    }
   };
+
+  useEffect(() => {
+    if (inputedData) {
+      console.log("here");
+      axios.post("http://localhost:3001/login", { inputedData }).then((res) => {
+        console.log(res.data);
+      });
+    }
+  }, [inputedData]);
   return (
     <div className="inputForm">
       <ThemeProvider theme={darkTheme}>
@@ -42,7 +59,7 @@ function SignIn() {
           <p className="pSignIn">Sign In</p>
           <TextField
             required
-            sx={{ mt: 1,width:'80%' }}
+            sx={{ mt: 1, width: "80%" }}
             id="username"
             label="Username"
             variant="outlined"
@@ -52,7 +69,7 @@ function SignIn() {
           />
           <TextField
             required
-            sx={{ mt: 1,width:'80%' }}
+            sx={{ mt: 1, width: "80%" }}
             id="password"
             label="Password"
             type="password"

@@ -1,5 +1,5 @@
 // import CustomInput from "./components/CustomInput";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import { useNavigate } from "react-router";
 // import axios from 'axios'
 import * as muiSignUp from "./styles/muiSignUp";
@@ -17,21 +17,15 @@ function SignUp() {
     formState: { errors },
   } = muiSignUp.useForm();
   const onSubmit = (data) => {
-    setRegistrationData(data);
-    // alert("Account Created");
-    // navigate("/");
-  };
-
-  useEffect(() => {
-    if (registrationData) {
+    if (data) {
       axios
-        .post("http://localhost:3001/register", { registrationData })
+        .post("http://localhost:3001/register", { data })
         .then((res) => {
-          console.log(res);
+          setRegistrationData(res);
+          navigate("/");
         });
-      console.log("registrationData", registrationData);
     }
-  }, [registrationData]);
+  };;
 
   return (
     <div className="inputForm">
