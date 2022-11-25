@@ -29,16 +29,17 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
   let inputedData = req.body.data;
+  console.log(inputedData,"inp")
   db.query(
     "Select * from user where email = ? And password = ?",
-    [inputedData.name, inputedData.password],
+    [inputedData.email, inputedData.password],
     (err, result) => {
       if (err) {
         res.send({
           err: err,
         });
       } else {
-        if (result) {
+        if (result.length) {
           res.send(result);
         } else {
           res.send({
